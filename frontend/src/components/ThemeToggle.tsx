@@ -11,7 +11,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       onClick={toggle}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
       title={dark ? "Light mode" : "Dark mode"}
-      className={`relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-ink-700 bg-ink-900 text-slate-400 transition hover:border-ink-600 hover:text-slate-100 ${className}`}
+      className={`flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-ink-700 bg-ink-900 text-slate-400 transition hover:border-ink-600 hover:text-slate-100 ${className}`}
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.span

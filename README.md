@@ -8,28 +8,75 @@ Job search with an AI layer. It pulls real jobs from public APIs, scores every o
 
 Light (the default) and dark, switched with one click.
 
+### Jobs, ranked by how well they match your resume
+
 | Light | Dark |
 |---|---|
-| ![Jobs ranked by how well they match your resume](docs/screenshots/jobs-light.png) | ![Jobs ranked by how well they match your resume, dark mode](docs/screenshots/jobs-dark.png) |
+| ![Jobs ranked by match score](docs/screenshots/jobs-light.png) | ![Jobs ranked by match score, dark mode](docs/screenshots/jobs-dark.png) |
 
-**Apply panel**: cover letter and resume ready to copy, then straight to the company's own application page.
+### Four job sources in one place
+
+Adzuna, Jooble, Arbeitnow and Remotive, each job tagged with where it came from.
+
+| Light | Dark |
+|---|---|
+| ![Jobs from the four sources](docs/screenshots/sources-light.png) | ![Jobs from the four sources, dark mode](docs/screenshots/sources-dark.png) |
+
+### Apply
+
+Cover letter and resume ready to copy, then straight to the company's own application page.
 
 | Light | Dark |
 |---|---|
 | ![Apply panel in the job drawer](docs/screenshots/apply-light.png) | ![Apply panel in the job drawer, dark mode](docs/screenshots/apply-dark.png) |
 
-**Application board**: drag a card from Saved to Applied, Interview, Offer or Rejected.
+### Application board
+
+Drag a card from Saved to Applied, Interview, Offer or Rejected.
 
 ![Application board, light mode](docs/screenshots/board-light.png)
 ![Application board, dark mode](docs/screenshots/board-dark.png)
 
-**Dashboard**: funnel, response rate, and the skills worth learning next.
+### Dashboard
+
+Funnel, response rate, and the skills worth learning next.
 
 | Light | Dark |
 |---|---|
-| ![Dashboard with funnel, weekly chart and skill gaps](docs/screenshots/dashboard-light.png) | ![Dashboard, dark mode](docs/screenshots/dashboard-dark.png) |
+| ![Dashboard with funnel, weekly chart and skill gaps](docs/screenshots/dashboard-light.png) | ![Dashboard with funnel, weekly chart and skill gaps, dark mode](docs/screenshots/dashboard-dark.png) |
 
-*The screenshots use a sample resume and real public job listings fetched from Adzuna.*
+### Profile
+
+Paste a resume or upload a PDF. Skills are found automatically.
+
+| Light | Dark |
+|---|---|
+| ![Profile page](docs/screenshots/profile-light.png) | ![Profile page, dark mode](docs/screenshots/profile-dark.png) |
+
+### Sign in
+
+| Light | Dark |
+|---|---|
+| ![Sign-in page](docs/screenshots/login-light.png) | ![Sign-in page, dark mode](docs/screenshots/login-dark.png) |
+
+### On a phone
+
+Bottom tab bar, filters that wrap, and cards that fit. Light on the top row, dark below.
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/mobile-jobs-light.png" width="260" alt="Jobs on a phone, light"></td>
+    <td><img src="docs/screenshots/mobile-board-light.png" width="260" alt="Board on a phone, light"></td>
+    <td><img src="docs/screenshots/mobile-dashboard-light.png" width="260" alt="Dashboard on a phone, light"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/mobile-jobs-dark.png" width="260" alt="Jobs on a phone, dark"></td>
+    <td><img src="docs/screenshots/mobile-board-dark.png" width="260" alt="Board on a phone, dark"></td>
+    <td><img src="docs/screenshots/mobile-dashboard-dark.png" width="260" alt="Dashboard on a phone, dark"></td>
+  </tr>
+</table>
+
+*The screenshots use a sample resume and real public job listings fetched from Adzuna, Jooble, Arbeitnow and Remotive.*
 
 ## What it does
 
