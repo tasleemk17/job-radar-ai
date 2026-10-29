@@ -1,5 +1,9 @@
 const KEY = "jobradar.token";
 
+// Empty when the website and the API share one address (Docker, dev proxy). On hosting where they are
+// separate, such as Vercel plus Render, the API address is set at build time with VITE_API_BASE.
+export const API_BASE: string = (import.meta.env.VITE_API_BASE ?? "").replace(/\/+$/, "");
+
 export const tokenStore = {
   get: () => localStorage.getItem(KEY),
   set: (token: string) => localStorage.setItem(KEY, token),
@@ -45,7 +49,7 @@ interface Options {
 }
 
 export async function api<T>(path: string, { method = "GET", body, form }: Options = {}): Promise<T> {
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${API_BASE}/api${path}`, {
     method,
     headers: headers(body !== undefined),
     body: form ?? (body !== undefined ? JSON.stringify(body) : undefined),
@@ -61,7 +65,7 @@ export async function streamCoverLetter(
   onText: (piece: string) => void,
   signal: AbortSignal,
 ): Promise<void> {
-  const res = await fetch("/api/ai/cover-letter", {
+  const res = await fetch(`${API_BASE}/api/ai/cover-letter`, {
     method: "POST",
     headers: headers(true),
     body: JSON.stringify({ job_id: jobId, tone }),

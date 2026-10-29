@@ -138,9 +138,13 @@ npm run dev
 ### Tests
 
 ```bash
-cd backend && pytest -q           # 35 tests
+cd backend && pytest -q           # 38 tests
 cd frontend && npm run build      # type-check + production build
 ```
+
+## Deploy
+
+Free hosting works: website on Vercel, API on Render, database on Neon (Postgres). Step by step in [docs/DEPLOY.md](docs/DEPLOY.md). `render.yaml` is the Render Blueprint.
 
 ## How matching works
 
@@ -157,7 +161,7 @@ Skills come from a fixed vocabulary (`app/skills.py`) with word-boundary rules, 
 ## Design decisions
 
 - **Hashing embeddings by default.** Words and word pairs are hashed into 512 buckets (`app/embeddings.py`). No model download, no GPU, deterministic tests. It is lexical, not semantic: "backend" and "server-side" are not close. Set `EMBEDDING_BACKEND=sentence-transformers` and install the package for real semantic vectors; nothing else changes.
-- **SQLite by default, Postgres by URL.** SQLAlchemy keeps the code the same. Set `DATABASE_URL=postgresql+psycopg://...` (for example a Supabase database) and install `psycopg[binary]`. Embeddings are stored as JSON and compared in Python, which is fine for thousands of jobs; **pgvector** is the next step beyond that.
+- **SQLite by default, Postgres by URL.** SQLAlchemy keeps the code the same. Set `DATABASE_URL` to any Postgres URL (for example Neon or Supabase) and paste it as the host gives it: `postgresql://` is rewritten for the bundled psycopg 3 driver. The full test suite passes on both SQLite and Postgres 16 (`TEST_DATABASE_URL=postgresql://... pytest`). Embeddings are stored as JSON and compared in Python, which is fine for thousands of jobs; **pgvector** is the next step beyond that.
 - **Legal sources only.** Remotive and Arbeitnow publish public APIs, and Adzuna and Jooble issue free API keys. Indeed, Glassdoor, Foundit, LinkedIn and Naukri have no public job-seeker API and forbid scraping, so they are not used (Adzuna already aggregates much of the same listings). Every job links back to the original posting, and API keys are never written to logs or error messages (they travel in the request URL, so error text is reduced to a status like `HTTP 401`).
 - **LLM output is untrusted, and so is its input.** Resume and job text go inside tags and the system prompt says to treat them as data, never as instructions. Model replies are parsed and length-limited, and any failure (network, bad JSON, refusal, quota) falls back to the rule-based answer instead of an error page.
 - **Dates from aggregators are not fully trusted.** Adzuna sometimes re-lists an old ad with a recent date, so a job can look newer than it is. The freshness lift and the Posted filter reduce the effect; the company's own page is the final word, and the Apply panel opens it.
@@ -186,6 +190,8 @@ All routes are under `/api` and need `Authorization: Bearer <token>` except regi
 | `ANTHROPIC_API_KEY` | empty | Turns Claude on |
 | `ANTHROPIC_MODEL` | `claude-haiku-5-5` | |
 | `DATABASE_URL` | `sqlite:///./jobradar.db` | |
+| `CORS_ORIGINS` | `http://localhost:5180` | Website addresses allowed to call the API, comma separated. Needed when the site and API are on different hosts |
+| `REFRESH_ON_START` | `true` | Refresh jobs in the background at startup when the newest fetched job is older than `REFRESH_HOURS` (a free host sleeps, so the timer alone is not enough) |
 | `REFRESH_HOURS` | `6` | Job refresh interval |
 | `AI_CALLS_PER_HOUR` | `30` | Per user |
 | `ADZUNA_APP_ID`, `ADZUNA_APP_KEY` | empty | Turns Adzuna on. Free keys at developer.adzuna.com |

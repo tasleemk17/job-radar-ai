@@ -63,6 +63,9 @@ CORS_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:5
 
 ENABLE_SCHEDULER = _flag("ENABLE_SCHEDULER", True)
 REFRESH_HOURS = int(os.getenv("REFRESH_HOURS", "6"))
+# A free host puts the server to sleep when idle, and the timer above does not run while asleep. So on
+# every start the jobs are refreshed in the background if the newest fetched job is older than REFRESH_HOURS.
+REFRESH_ON_START = _flag("REFRESH_ON_START", True)
 SEED_DEMO = _flag("SEED_DEMO", True)
 
 AI_CALLS_PER_HOUR = int(os.getenv("AI_CALLS_PER_HOUR", "30"))

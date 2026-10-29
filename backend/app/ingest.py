@@ -1,12 +1,14 @@
 import logging
+from datetime import datetime, timedelta
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from . import config
 from .db import SessionLocal
 from .demo_jobs import DEMO_JOBS
 from .embeddings import embed
-from .models import Job
+from .models import Job, utcnow
 from .skills import extract_skills
 from .sources import fetch_all
 
@@ -44,3 +46,19 @@ def refresh_jobs(db: Session, queries: list[str] | None = None, location: str | 
 def scheduled_refresh() -> None:
     with SessionLocal() as db:
         refresh_jobs(db)
+
+
+def needs_refresh(db: Session, now: datetime | None = None) -> bool:
+    """True when no real job has been fetched yet, or the newest one is older than REFRESH_HOURS."""
+    newest = db.scalar(select(func.max(Job.created_at)).where(Job.source.not_in(("demo", "manual"))))
+    return newest is None or (now or utcnow()) - newest > timedelta(hours=config.REFRESH_HOURS)
+
+
+def refresh_if_stale() -> None:
+    """Run in a background thread at startup. It never raises, so a provider being down cannot stop the app."""
+    try:
+        with SessionLocal() as db:
+            if needs_refresh(db):
+                refresh_jobs(db)
+    except Exception:
+        log.exception("startup refresh failed")

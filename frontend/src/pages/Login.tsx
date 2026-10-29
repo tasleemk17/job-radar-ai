@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Brain, Eye, EyeOff, KanbanSquare, Radar } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { useAuth } from "../auth";
+import { useServerWake } from "../useServerWake";
 import RadarMark from "../components/RadarMark";
 import ThemeToggle from "../components/ThemeToggle";
 
@@ -13,6 +14,7 @@ const POINTS = [
 
 export default function Login() {
   const { submit } = useAuth();
+  const { waking } = useServerWake();
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -106,6 +108,12 @@ export default function Login() {
           </div>
           {mode === "register" && <p className="mt-1.5 text-xs text-slate-500">At least 8 characters.</p>}
 
+          {waking && (
+            <p role="status" className="mt-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-warn">
+              The server was asleep and is starting up. Free hosting does this when nobody has visited for a while. It takes up to a minute,
+              then sign-in works normally.
+            </p>
+          )}
           {error && (
             <p role="alert" className="mt-4 rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-bad">
               {error}

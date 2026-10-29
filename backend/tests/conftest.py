@@ -3,8 +3,11 @@ import tempfile
 
 # Must be set before the app is imported: a throwaway database, no scheduler, no AI key
 _dir = tempfile.mkdtemp()
-os.environ["DATABASE_URL"] = f"sqlite:///{_dir}/test.db"
+# Normally a throwaway SQLite file. Set TEST_DATABASE_URL to a Postgres URL to run the same tests against
+# Postgres (the tests create and drop their own rows, so use an empty database).
+os.environ["DATABASE_URL"] = os.environ.get("TEST_DATABASE_URL") or f"sqlite:///{_dir}/test.db"
 os.environ["ENABLE_SCHEDULER"] = "false"
+os.environ["REFRESH_ON_START"] = "false"  # no background calls to the job APIs while testing
 os.environ["ANTHROPIC_API_KEY"] = ""
 os.environ["SEED_DEMO"] = "true"
 # A developer's real keys in backend/.env must never make tests call the live APIs

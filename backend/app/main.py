@@ -1,12 +1,13 @@
 import logging
+import threading
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .config import CORS_ORIGINS, ENABLE_SCHEDULER, REFRESH_HOURS, SEED_DEMO
+from .config import CORS_ORIGINS, ENABLE_SCHEDULER, REFRESH_HOURS, REFRESH_ON_START, SEED_DEMO
 from .db import Base, SessionLocal, engine
-from .ingest import scheduled_refresh, seed_demo
+from .ingest import refresh_if_stale, scheduled_refresh, seed_demo
 from .routers import ai, applications, auth, jobs, profile, stats
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -21,6 +22,9 @@ async def lifespan(_: FastAPI):
     if SEED_DEMO:
         with SessionLocal() as db:
             seed_demo(db)
+    if REFRESH_ON_START:
+        # In a thread, so the server answers requests straight away instead of waiting for four job APIs
+        threading.Thread(target=refresh_if_stale, name="startup-refresh", daemon=True).start()
     scheduler = None
     if ENABLE_SCHEDULER:
         from apscheduler.schedulers.background import BackgroundScheduler
