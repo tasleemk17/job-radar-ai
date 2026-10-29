@@ -64,7 +64,7 @@ npm run dev
 ### Tests
 
 ```bash
-cd backend && pytest -q           # 20 tests
+cd backend && pytest -q           # 35 tests
 cd frontend && npm run build      # type-check + production build
 ```
 
@@ -98,7 +98,7 @@ All routes are under `/api` and need `Authorization: Bearer <token>` except regi
 |---|---|
 | `POST /auth/register`, `POST /auth/login` | Create account, sign in |
 | `GET/PUT /profile`, `POST /profile/resume-pdf` | Resume, roles, detected skills |
-| `GET /jobs` | Search and filter, ranked by match. Params: `q`, `remote`, `source`, `min_score`, `sort`, `limit`, `offset` |
+| `GET /jobs` | Search and filter, ranked by match. Params: `q`, `remote`, `source`, `min_score`, `max_age_days`, `demo`, `sort`, `limit`, `offset` |
 | `GET /jobs/{id}`, `POST /jobs`, `POST /jobs/refresh` | Detail, add your own, fetch new |
 | `GET/POST /applications`, `PATCH/DELETE /applications/{id}` | The board |
 | `POST /ai/analyze`, `POST /ai/cover-letter` | Fit analysis (JSON), cover letter (SSE stream) |
@@ -128,13 +128,15 @@ backend/app/
   main.py  config.py  db.py  models.py  schemas.py  security.py
   embeddings.py  skills.py  matching.py     # the matching engine
   ai.py                                      # Claude calls + fallbacks
-  sources.py  ingest.py  demo_jobs.py        # job intake
+  sources.py  ingest.py  demo_jobs.py        # job intake (4 providers)
+  visibility.py  ratelimit.py
   routers/  auth profile jobs applications ai stats
 backend/tests/                               # matching, sources, full API flow
 frontend/src/
   pages/  Login Jobs Board Dashboard Profile
-  components/  JobDrawer JobCard ScoreRing Layout
-  api.ts (fetch + SSE reader)  auth.tsx
+  components/  JobDrawer ApplyPanel JobCard ScoreRing Segmented
+               Layout ThemeToggle Toast SmoothScroll
+  api.ts (fetch + SSE reader)  auth.tsx  theme.tsx  scroll.ts
 ```
 
 ## Roadmap
