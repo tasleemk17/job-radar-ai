@@ -1,0 +1,28 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (see .env.example)}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-haiku-5-5}
+      REFRESH_HOURS: ${REFRESH_HOURS:-6}
+      ADZUNA_APP_ID: ${ADZUNA_APP_ID:-}
+      ADZUNA_APP_KEY: ${ADZUNA_APP_KEY:-}
+      ADZUNA_COUNTRY: ${ADZUNA_COUNTRY:-in}
+      ADZUNA_PAGES: ${ADZUNA_PAGES:-3}
+      JOOBLE_API_KEY: ${JOOBLE_API_KEY:-}
+      JOB_LOCATION: ${JOB_LOCATION:-India}
+    volumes:
+      - jobradar-data:/data
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5180:80"
+
+volumes:
+  jobradar-data:
