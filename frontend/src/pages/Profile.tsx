@@ -18,8 +18,12 @@ export default function Profile() {
   const [extra, setExtra] = useState("");
   const file = useRef<HTMLInputElement>(null);
 
+  // The form is filled from the server once. After that the person's own typing is never overwritten, even if
+  // the saved profile arrives late (a sleeping free server can take a minute) or is fetched again.
+  const filled = useRef(false);
   useEffect(() => {
-    if (!profile.data) return;
+    if (!profile.data || filled.current) return;
+    filled.current = true;
     setResume(profile.data.resume_text);
     setRoles(profile.data.roles);
     setLocation(profile.data.location);
