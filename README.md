@@ -4,6 +4,33 @@ Job search with an AI layer. It pulls real jobs from public APIs, scores every o
 
 **Stack:** React 19 + TypeScript + Tailwind, FastAPI, SQLAlchemy, Claude API, Docker.
 
+## Screenshots
+
+Light (the default) and dark, switched with one click.
+
+| Light | Dark |
+|---|---|
+| ![Jobs ranked by how well they match your resume](docs/screenshots/jobs-light.png) | ![Jobs ranked by how well they match your resume, dark mode](docs/screenshots/jobs-dark.png) |
+
+**Apply panel**: cover letter and resume ready to copy, then straight to the company's own application page.
+
+| Light | Dark |
+|---|---|
+| ![Apply panel in the job drawer](docs/screenshots/apply-light.png) | ![Apply panel in the job drawer, dark mode](docs/screenshots/apply-dark.png) |
+
+**Application board**: drag a card from Saved to Applied, Interview, Offer or Rejected.
+
+![Application board, light mode](docs/screenshots/board-light.png)
+![Application board, dark mode](docs/screenshots/board-dark.png)
+
+**Dashboard**: funnel, response rate, and the skills worth learning next.
+
+| Light | Dark |
+|---|---|
+| ![Dashboard with funnel, weekly chart and skill gaps](docs/screenshots/dashboard-light.png) | ![Dashboard, dark mode](docs/screenshots/dashboard-dark.png) |
+
+*The screenshots use a sample resume and real public job listings fetched from Adzuna.*
+
 ## What it does
 
 | Feature | How it works |
