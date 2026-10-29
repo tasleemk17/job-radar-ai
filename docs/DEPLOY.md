@@ -69,6 +69,8 @@ Open the Vercel address and create an account. The first request after a quiet p
 |---|---|
 | "Failed to fetch" or a long wait | The API is asleep or starting. Wait a minute. |
 | Browser console says a request was blocked by CORS | `CORS_ORIGINS` in Render is not exactly the Vercel address. |
+| Vercel says "Multiple applications detected" | Press **Import single project** on the `frontend` row. Do not import `backend`: it runs on Render. |
+| Vercel build fails with `vite: command not found` | The install step was skipped. `frontend/vercel.json` sets `npm ci` and `npm run build`; make sure Root Directory is `frontend`. |
 | Page reloads on `/board` show 404 | `frontend/vercel.json` is missing or the Root Directory is not `frontend`. |
 | The site calls itself or shows no jobs | `VITE_API_BASE` was not set before the Vercel build. Set it, then redeploy. |
 | Deploy fails on Render | Open the deploy log. The usual cause is an empty or wrong `DATABASE_URL`. |

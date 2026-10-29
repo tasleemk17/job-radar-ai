@@ -4,6 +4,8 @@ Job search with an AI layer. It pulls real jobs from public APIs, scores every o
 
 **Stack:** React 19 + TypeScript + Tailwind, FastAPI, SQLAlchemy, Claude API, Docker.
 
+**Live demo: https://job-radar-ai-m713.vercel.app** (free hosting, so the first visit after a quiet period can take up to a minute while the server wakes up). Create an account, paste a resume, and the jobs are ranked for you.
+
 ## Screenshots
 
 Light (the default) and dark, switched with one click.
