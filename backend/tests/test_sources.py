@@ -121,7 +121,8 @@ def test_adzuna_and_jooble_are_called_once_per_query_when_keys_are_set(monkeypat
     joo = [c for c in calls if "jooble" in c[1]]
     assert len(adz) == 2 and len(joo) == 2
     assert "/jobs/in/search/1" in adz[0][1] and adz[0][2]["params"]["what"] == "python developer" and adz[0][2]["params"]["where"] == "Pune"
-    assert joo[0][0] == "POST" and joo[0][1].endswith("/api/jkey") and joo[0][2]["json"] == {"keywords": "python developer", "location": "Pune", "page": 1}
+    # the city is not sent to Jooble: it only understands the country (see fetch_jooble)
+    assert joo[0][0] == "POST" and joo[0][1].endswith("/api/jkey") and joo[0][2]["json"] == {"keywords": "python developer", "location": "India", "page": 1}
     assert {j["source"] for j in jobs} == {"adzuna", "jooble"}
 
 
@@ -144,6 +145,29 @@ def test_adzuna_reads_several_pages_and_stops_at_a_short_page(monkeypatch):
     monkeypatch.setattr(config, "ADZUNA_PAGES", 2)
     sources.fetch_adzuna(["dev"], None)
     assert len(calls) == 2  # the configured cap wins
+
+
+def test_jooble_reads_several_pages_and_stops_at_a_short_page(monkeypatch):
+    sent = []
+
+    def fake(method, url, **kwargs):
+        page = kwargs["json"]["page"]
+        sent.append((kwargs["json"]["location"], page))
+        size = 20 if page < 3 else 4  # pages 1 and 2 are full, page 3 is the last
+        return {"jobs": [{"title": "Dev", "link": f"https://jooble.org/desc/{page}-{i}", "company": "X"} for i in range(size)]}
+
+    monkeypatch.setattr(sources, "_json", fake)
+    monkeypatch.setattr(config, "JOOBLE_API_KEY", "jkey")
+    monkeypatch.setattr(config, "JOOBLE_PAGES", 5)
+    monkeypatch.setattr(config, "JOOBLE_LOCATION", "India")
+    jobs = sources.fetch_jooble(["dev"], "Pune")
+    assert sent == [("India", 1), ("India", 2), ("India", 3)]  # the country, never the city; stopped at the short page
+    assert len(jobs) == 44
+
+    sent.clear()
+    monkeypatch.setattr(config, "JOOBLE_PAGES", 2)
+    sources.fetch_jooble(["dev"], "Pune")
+    assert len(sent) == 2  # the configured cap wins
 
 
 def test_a_whole_country_is_not_sent_as_a_place(monkeypatch):

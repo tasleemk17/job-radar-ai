@@ -50,6 +50,10 @@ ADZUNA_COUNTRY = os.getenv("ADZUNA_COUNTRY", "in").strip().lower()
 ADZUNA_PAGES = max(1, min(5, int(os.getenv("ADZUNA_PAGES", "3"))))
 # Jooble: free key at https://jooble.org/api/about
 JOOBLE_API_KEY = os.getenv("JOOBLE_API_KEY", "").strip()
+# Jooble understands only a country as the place: a city such as "Pune" returns 0 jobs, so the country is
+# always sent. 20 jobs come per page and a search can have a hundred, hence several pages (1 to 5).
+JOOBLE_LOCATION = os.getenv("JOOBLE_LOCATION", "India").strip()
+JOOBLE_PAGES = max(1, min(5, int(os.getenv("JOOBLE_PAGES", "3"))))
 
 # What Adzuna and Jooble are asked for when nobody's resume roles are known yet (scheduled refresh)
 JOB_QUERIES = _list("JOB_QUERIES", "software developer,full stack developer,python developer,react developer,backend developer")

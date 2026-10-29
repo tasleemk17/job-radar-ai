@@ -145,6 +145,8 @@ All routes are under `/api` and need `Authorization: Bearer <token>` except regi
 | `ADZUNA_COUNTRY` | `in` | Adzuna country code (`in` is India) |
 | `ADZUNA_PAGES` | `3` | Pages (50 jobs each) read per search, 1 to 5. Each page is one API call |
 | `JOOBLE_API_KEY` | empty | Turns Jooble on. Free key at jooble.org/api/about |
+| `JOOBLE_LOCATION` | `India` | Jooble only understands a country as the place (a city returns 0 jobs), so this is always sent |
+| `JOOBLE_PAGES` | `3` | Pages (20 jobs each) read per search, 1 to 5 |
 | `JOB_LOCATION` | `India` | Used when your profile has no city |
 | `EMBEDDING_BACKEND` | hashing | `sentence-transformers` for semantic vectors |
 

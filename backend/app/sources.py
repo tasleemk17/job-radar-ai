@@ -20,6 +20,7 @@ REMOTIVE_URL = "https://remotive.com/api/remote-jobs?limit=150"
 ARBEITNOW_URL = "https://www.arbeitnow.com/api/job-board-api"
 ADZUNA_URL = "https://api.adzuna.com/v1/api/jobs/{country}/search/{page}"
 ADZUNA_PER_PAGE = 50
+JOOBLE_PER_PAGE = 20
 JOOBLE_URL = "https://jooble.org/api/{key}"
 _HEADERS = {"User-Agent": "JobRadar/1.0 (portfolio project)"}
 
@@ -226,10 +227,16 @@ def fetch_adzuna(queries: list[str], location: str | None) -> list[dict]:
 
 
 def fetch_jooble(queries: list[str], location: str | None) -> list[dict]:
+    """`location` (the person's city) is not used: Jooble answers a city with 0 jobs and a country with the
+    real list, so the country from config is always sent. Scoring against the resume does the narrowing."""
     jobs = []
     for query in queries:
-        body = {"keywords": query, "location": _place(location) or config.JOB_LOCATION, "page": 1}
-        jobs.extend(parse_jooble(_json("POST", JOOBLE_URL.format(key=config.JOOBLE_API_KEY), json=body)))
+        for page in range(1, config.JOOBLE_PAGES + 1):
+            body = {"keywords": query, "location": config.JOOBLE_LOCATION, "page": page}
+            payload = _json("POST", JOOBLE_URL.format(key=config.JOOBLE_API_KEY), json=body)
+            jobs.extend(parse_jooble(payload))
+            if len(payload.get("jobs", [])) < JOOBLE_PER_PAGE:
+                break  # a short page was the last one
     return jobs
 
 

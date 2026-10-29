@@ -12,6 +12,8 @@ services:
       ADZUNA_COUNTRY: ${ADZUNA_COUNTRY:-in}
       ADZUNA_PAGES: ${ADZUNA_PAGES:-3}
       JOOBLE_API_KEY: ${JOOBLE_API_KEY:-}
+      JOOBLE_LOCATION: ${JOOBLE_LOCATION:-India}
+      JOOBLE_PAGES: ${JOOBLE_PAGES:-3}
       JOB_LOCATION: ${JOB_LOCATION:-India}
     volumes:
       - jobradar-data:/data
